@@ -12,8 +12,7 @@ trait ManagerTrait {
 
     public function Manager(string $manager) : Manager {
         if(empty($this->_manager)) $this->setManager(new Manager);
-        else $this->_manager->init($manager);
-        return $this->_manager;
+        return $this->_manager->init($manager);
     }
     
     #endregion

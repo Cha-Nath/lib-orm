@@ -10,8 +10,7 @@ trait RepositoryTrait {
 
     public function Repository(string $repository, string $entity) {
         if(empty($this->_repository)) $this->setRepository(new $repository);
-        else $this->_repository->init($entity);
-        return $this->_repository;
+        return $this->_repository->init($entity);
     }
     
     #endregion
