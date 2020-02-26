@@ -45,7 +45,7 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
         $entities = $binds = [];
         
         $binds = $this->prepareParameters($parameters);
-        $sql = $this->select() . $this->from() . $this->where() . $this->sort();
+        $sql = $this->select() . $this->from() . $this->where() . $this->sort() . $this->Query()->end();
 
         $req = $this->execute($sql, $binds);
 
@@ -61,6 +61,20 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
         $entities = $this->findBy($parameters, $sortings, $parts);
 
         return !empty($entities) ? $entities[0] : null;
+    }
+
+    public function update(array $values, array $parameters) {
+
+        $vbinds = $this->prepareParameters($values, 'update', ', ', 'set_');
+        $pbinds = $this->prepareParameters($parameters);
+
+        $binds = array_merge($vbinds, $pbinds);
+
+        $sql = $this->_update() . $this->where() . $this->Query()->end();
+
+        $req = $this->execute($sql, $binds);
+
+        var_dump($sql, $binds, $this);
     }
 
     #region Getter

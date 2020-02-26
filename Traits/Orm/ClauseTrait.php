@@ -5,7 +5,7 @@ namespace nlib\Orm\Traits\Orm;
 trait ClauseTrait {
 
     private $_clauses = [
-        'parts' => ['select', 'from', 'where'],
+        'parts' => ['select', 'from', 'where', 'update'],
         'sorts' => ['groupby', 'orderby', 'limit'],
     ];
 
@@ -15,6 +15,8 @@ trait ClauseTrait {
     protected function select() : string { return $this->getPart('select'); }
     
     protected function where() : string { return (($where = $this->getPart('where')) != $this->Query()->where()) ? $where : ''; }
+
+    protected function _update() : string { var_dump($this->getPart('update'));return $this->getPart('update'); }
     
     protected function from() : string { return $this->getPart('from'); }
 
@@ -33,6 +35,10 @@ trait ClauseTrait {
     protected function getClauses(string $clause) : array {
         return array_key_exists($clause, $this->_clauses) ? $this->_clauses[$clause] : [];
     }   
+
+    protected function inClauses(string $clause, string $key) : bool {
+        return in_array($key, $this->getClauses($clause));
+    }
 
     // public function reset() : self { $this->_parts = []; $this->_sorts = []; return $this; }
 }

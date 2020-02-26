@@ -10,9 +10,9 @@ trait PrepareTrait {
     use PdoTrait;
     use ClauseTrait;
 
-    protected function prepareParameters(array $parameters) : array {
+    protected function prepareParameters(array $parameters, string $type = 'where', string $delimiter = ' AND ', string $prefix = '') : array {
 
-        $where = '';
+        $string = '';
         $binds = [];
         
         if(!empty($parameters)) :
@@ -20,16 +20,16 @@ trait PrepareTrait {
             $count = count($parameters);
             foreach($parameters as $key => $value) :
 
-                $slug = ':' . $this->str_slug($key);
-                $where .= $key . '=' . $slug;
+                $slug = ':' . $prefix . $this->str_slug($key) . '_' . $i;
+                $string .= $key . '=' . $slug;
                 $binds[$slug] = [$value, $this->getPDOType($value)];
 
-                if($count < $i - 1) $where .= ' AND ';
+                if($i < ($count - 1)) $string .= $delimiter;
 
                 ++$i;
             endforeach;
             
-            $this->_parts['where'] = $this->getPart('where') . $where;
+            if($this->inClauses('parts', $type)) $this->_parts[$type] = $this->getPart($type) . $string;
         endif;
 
         return $binds;

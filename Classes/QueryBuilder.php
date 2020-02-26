@@ -46,6 +46,11 @@ class QueryBuilder {
         return $this;
     }
 
+    public function update(string $table = '', string $update = '') : self {
+        $this->_query .= 'UPDATE ' . (!empty($table) ? $table : $this->_table) . ' SET ' . $update . ' ';
+        return $this;
+    }
+
     public function end() : self {
         $this->_query .= ';';
         return $this;
