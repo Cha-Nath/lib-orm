@@ -1,26 +1,22 @@
 <?php
 
-namespace nlib\Orm\Traits;
+namespace nlib\Orm\Traits\Orm;
 
 use nlib\Orm\Classes\Connection;
 
 trait ExecuteTrait {
 
-    use ValueTrait;
+    use PrepareTrait;
+    use BindTrait;
 
-    protected function execute(string $sql, array $parameters = []) {
+    protected function execute(string $sql, array $binds = []) {
         
         $req = null;
-        $values = [];
 
         try {
 
-            $this->prepare($sql, $values, $parameters);
-
             $req = Connection::i()->getConnection()->prepare($sql);
-                
-            $this->bind($req, $values);
-
+            $this->bind($req, $binds);
             $req->execute();
             
         } catch(\Exception $e) {
