@@ -34,5 +34,5 @@ trait ClauseTrait {
         return array_key_exists($clause, $this->_clauses) ? $this->_clauses[$clause] : [];
     }   
 
-    public function reset() : self { $this->_parts = []; $this->_sorts = []; return $this; }
+    // public function reset() : self { $this->_parts = []; $this->_sorts = []; return $this; }
 }

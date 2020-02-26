@@ -2,9 +2,11 @@
 
 namespace nlib\Orm\Classes;
 
+use nlib\Orm\Interfaces\PrepareTraitInterface;
 use nlib\Orm\Interfaces\ExecuteInterface;
 use nlib\Orm\Interfaces\ManagerInterface;
 use nlib\Yaml\Interfaces\ParserTraitInterface;
+use nlib\Tool\Interfaces\StringTraitInterface;
 
 use nlib\Path\Classes\Path;
 
@@ -12,7 +14,7 @@ use nlib\Yaml\Traits\ParserTrait;
 use nlib\Orm\Traits\Orm\ExecuteTrait;
 use nlib\Orm\Traits\Orm\QueryTrait;
 
-class Manager implements ManagerInterface, ExecuteInterface, ParserTraitInterface {
+class Manager implements ManagerInterface, ExecuteInterface, ParserTraitInterface, PrepareTraitInterface, StringTraitInterface {
 
     use ParserTrait;
     use ExecuteTrait;
