@@ -11,7 +11,7 @@ trait DebugTrait {
     private $_debug = false;
     private $_die = false;
 
-    protected function debug(array ...$debug) : void {
+    protected function debug(...$debug) : void {
         if($this->_debug) :
             var_dump($debug);
             $logs = ['Orm Debug' => json_encode($debug)];
