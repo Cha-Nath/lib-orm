@@ -2,6 +2,7 @@
 
 namespace nlib\Orm\Classes;
 
+use nlib\Orm\Interfaces\DebugTraitInterface;
 use nlib\Orm\Interfaces\PrepareTraitInterface;
 use nlib\Orm\Interfaces\ManagerInterface;
 use nlib\Yaml\Interfaces\ParserTraitInterface;
@@ -10,14 +11,18 @@ use nlib\Tool\Interfaces\StringTraitInterface;
 use nlib\Path\Classes\Path;
 
 use nlib\Yaml\Traits\ParserTrait;
+use nlib\Orm\Traits\Orm\DebugTrait;
 use nlib\Orm\Traits\Orm\ExecuteTrait;
+use nlib\Orm\Traits\Orm\HandleTrait;
 use nlib\Orm\Traits\Orm\QueryTrait;
 
-class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInterface, StringTraitInterface {
+class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInterface, StringTraitInterface, DebugTraitInterface {
 
     use ParserTrait;
     use ExecuteTrait;
     use QueryTrait;
+    use HandleTrait;
+    use DebugTrait;
 
     private $_table;
     private $_prefix;
@@ -49,21 +54,17 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
 
         $req = $this->execute($sql, $binds);
 
-        $entity = $this->getEntity();
-        while($r = $req->fetch(\PDO::FETCH_ASSOC)) $entities[] = (new $entity)->hydrate($r);
-
-        return $entities;
+        return $this->handleSimpleDataObjects($req);
     }
 
-    public function findOneBy(array $parameters = [], array $sortings = [], array $parts = []) {
+    public function findOneBy(array $parameters = []) {
 
-        $sortings['LIMIT'] = 1;
-        $entities = $this->findBy($parameters, $sortings, $parts);
+        $entities = $this->prepareSorts(['limit' => 1])->findBy($parameters);
 
         return !empty($entities) ? $entities[0] : null;
     }
 
-    public function update(array $values, array $parameters) {
+    public function update(array $values, array $parameters) : bool {
 
         $vbinds = $this->prepareParameters($values, 'update', ', ', 'set_');
         $pbinds = $this->prepareParameters($parameters);
@@ -74,7 +75,7 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
 
         $req = $this->execute($sql, $binds);
 
-        var_dump($sql, $binds, $this);
+        return $this->handleRowCount($req);
     }
 
     #region Getter

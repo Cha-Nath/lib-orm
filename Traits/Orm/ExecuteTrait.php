@@ -3,13 +3,14 @@
 namespace nlib\Orm\Traits\Orm;
 
 use nlib\Orm\Classes\Connection;
+use PDOStatement;
 
 trait ExecuteTrait {
 
     use PrepareTrait;
     use BindTrait;
 
-    protected function execute(string $sql, array $binds = []) {
+    protected function execute(string $sql, array $binds = []) : ?PDOStatement {
         
         $req = null;
 
@@ -17,6 +18,7 @@ trait ExecuteTrait {
 
             $req = Connection::i()->getConnection()->prepare($sql);
             $this->bind($req, $binds);
+            $this->debug($sql, $binds, $req);
             $req->execute();
             
         } catch(\Exception $e) {

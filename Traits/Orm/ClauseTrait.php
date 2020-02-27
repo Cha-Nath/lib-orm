@@ -16,7 +16,7 @@ trait ClauseTrait {
     
     protected function where() : string { return (($where = $this->getPart('where')) != $this->Query()->where()) ? $where : ''; }
 
-    protected function _update() : string { var_dump($this->getPart('update'));return $this->getPart('update'); }
+    protected function _update() : string { return $this->getPart('update'); }
     
     protected function from() : string { return $this->getPart('from'); }
 
