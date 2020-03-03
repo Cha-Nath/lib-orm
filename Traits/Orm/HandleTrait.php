@@ -17,7 +17,9 @@ trait HandleTrait {
 
     protected function handleSimpleDataObjects(PDOStatement &$req) : array {
 
+        $entities = [];
         $entity = $this->getEntity();
+        
         while($r = $req->fetch(\PDO::FETCH_ASSOC)) $entities[] = (new $entity)->hydrate($r);
 
         $this->close($req);
