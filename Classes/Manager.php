@@ -50,7 +50,7 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
         $entities = $binds = [];
         
         $binds = $this->prepareParameters($parameters);
-        $sql = $this->select() . $this->from() . $this->where() . $this->sort() . $this->Query()->end();
+        $sql = $this->_select() . $this->_from() . $this->_where() . $this->_sort() . $this->Query()->end();
 
         $req = $this->execute($sql, $binds);
 
@@ -64,15 +64,29 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
         return !empty($entities) ? $entities[0] : null;
     }
 
-    public function update(array $values, array $parameters) : bool {
+    public function update(array $values, array $parameters = []) : bool {
 
         $vbinds = $this->prepareParameters($values, 'update', ', ', 'set_');
         $pbinds = $this->prepareParameters($parameters);
 
         $binds = array_merge($vbinds, $pbinds);
 
-        $sql = $this->_update() . $this->where() . $this->Query()->end();
+        $sql = $this->_update() . $this->_where() . $this->Query()->end();
 
+        $req = $this->execute($sql, $binds);
+
+        return $this->handleRowCount($req);
+    }
+
+    public function insert(array $values, array $parameters = []) : bool {
+
+        $vbinds = $this->prepareParameters($values, 'insert', ', ', 'into_');
+        $pbinds = $this->prepareParameters($parameters);
+
+        $binds = array_merge($vbinds, $pbinds);
+
+        $sql = $this->_insert() . $this->_where() . $this->Query()->end();
+        
         $req = $this->execute($sql, $binds);
 
         return $this->handleRowCount($req);

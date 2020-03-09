@@ -22,7 +22,7 @@ class QueryBuilder {
     }
 
     public function from(string $table = '') : self {
-        $this->_query = ' FROM ' . (!empty($table) ? $table : $this->_table . ' ');
+        $this->_query = ' FROM ' . $this->getTable($table) . ' ';
         return $this;
     }
 
@@ -46,8 +46,18 @@ class QueryBuilder {
         return $this;
     }
 
-    public function update(string $table = '', string $update = '') : self {
-        $this->_query .= 'UPDATE ' . (!empty($table) ? $table : $this->_table) . ' SET ' . $update . ' ';
+    public function update(string $table, string $update) : self {
+        $this->_query .= 'UPDATE ' . $this->getTable($table) . ' SET ' . $update . ' ';
+        return $this;
+    }
+
+    public function insert(string $table, string $key, string $value) : self {
+        $this->_query .= 'INSERT' . $this->into($table, $key, $value);
+        return $this;
+    }
+
+    public function replace(string $table, string $key, string $value) : self {
+        $this->_query .= 'REPLACE' . $this->into($table, $key, $value);
         return $this;
     }
 
@@ -55,4 +65,13 @@ class QueryBuilder {
         $this->_query .= ';';
         return $this;
     }
+
+    #region Getter
+    
+    public function getTable(string $table = '') { return (!empty($table) ? $table : $this->_table); }
+
+    public function into(string $table, string $key, string $value) : string {
+        return ' INTO ' . $this->getTable($table) . ' (' . $key . ') VALUES (' . $value . ') '; }
+    
+    #endregion
 }
