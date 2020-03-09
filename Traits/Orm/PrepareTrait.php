@@ -10,10 +10,11 @@ trait PrepareTrait {
     use PdoTrait;
     use ClauseTrait;
 
-    protected function prepareParameters(array $parameters, string $type = 'where', string $delimiter = ' AND ', string $prefix = '') : array {
+    protected function prepareParameters(array $parameters, string $type = 'where', string $delimiter = ' AND ', string $prefix = '', bool $into = false) : array {
 
         $string = '';
         $binds = [];
+        $skey = $svalue = '';
         
         if(!empty($parameters)) :
             $i = 0;
@@ -21,15 +22,24 @@ trait PrepareTrait {
             foreach($parameters as $key => $value) :
 
                 $slug = ':' . $prefix . $this->str_slug($key) . '_' . $i;
-                $string .= $key . '=' . $slug;
-                $binds[$slug] = [$value, $this->getPDOType($value)];
 
-                if($i < ($count - 1)) $string .= $delimiter;
+                if(!$into) :
+                    $string .= $key . '=' . $slug;
+                    if($i < ($count - 1)) : $string .= $delimiter; endif;
+                else : 
+                    $skey .= $key;
+                    $svalue .= $slug;
+
+                    if($i < ($count - 1)) : $skey .= ', '; $svalue .= ', '; endif;
+                endif;
+
+                $binds[$slug] = [$value, $this->getPDOType($value)];
 
                 ++$i;
             endforeach;
             
-            if($this->inClauses('parts', $type)) $this->_parts[$type] = $this->getPart($type) . $string;
+            if($this->inClauses('parts', $type)) $this->_parts[$type] = $into
+                ? str_replace(['{key}', '{value}'], [$skey, $svalue], $this->getPart($type)) : $this->getPart($type) . $string;
         endif;
 
         return $binds;

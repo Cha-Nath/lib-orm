@@ -70,9 +70,8 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
         $pbinds = $this->prepareParameters($parameters);
 
         $binds = array_merge($vbinds, $pbinds);
-
+        
         $sql = $this->_update() . $this->_where() . $this->Query()->end();
-
         $req = $this->execute($sql, $binds);
 
         return $this->handleRowCount($req);
@@ -80,11 +79,11 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
 
     public function insert(array $values, array $parameters = []) : bool {
 
-        $vbinds = $this->prepareParameters($values, 'insert', ', ', 'into_');
+        $vbinds = $this->prepareParameters($values, 'insert', ', ', 'into_', true);
         $pbinds = $this->prepareParameters($parameters);
 
         $binds = array_merge($vbinds, $pbinds);
-
+        
         $sql = $this->_insert() . $this->_where() . $this->Query()->end();
         
         $req = $this->execute($sql, $binds);

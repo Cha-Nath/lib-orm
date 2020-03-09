@@ -42,7 +42,11 @@ trait ClauseTrait {
     
     protected function getClauses(string $clause) : array {
         return array_key_exists($clause, $this->_clauses) ? $this->_clauses[$clause] : [];
-    }   
+    }
+
+    #endregion
+
+    #region In   
 
     protected function inClauses(string $clause, string $key) : bool {
         return in_array($key, $this->getClauses($clause));
