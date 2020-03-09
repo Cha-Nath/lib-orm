@@ -91,6 +91,20 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
         return $this->handleRowCount($req);
     }
 
+    public function replace(array $values, array $parameters = []) : bool {
+
+        $vbinds = $this->prepareParameters($values, 'replace', ', ', 'replace_', true);
+        $pbinds = $this->prepareParameters($parameters);
+
+        $binds = array_merge($vbinds, $pbinds);
+        
+        $sql = $this->_replace() . $this->_where() . $this->Query()->end();
+        
+        $req = $this->execute($sql, $binds);
+
+        return $this->handleRowCount($req);
+    }
+
     #region Getter
     
     public function getEntity() : string { return $this->_entity; }

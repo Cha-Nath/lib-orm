@@ -5,7 +5,7 @@ namespace nlib\Orm\Traits\Orm;
 trait ClauseTrait {
 
     private $_clauses = [
-        'parts' => ['select', 'from', 'where', 'update', 'insert'],
+        'parts' => ['select', 'from', 'where', 'update', 'insert', 'replace'],
         'sorts' => ['groupby', 'orderby', 'limit'],
     ];
 
@@ -21,6 +21,8 @@ trait ClauseTrait {
     protected function _update() : string { return $this->getPart('update'); }
 
     protected function _insert() : string { return $this->getPart('insert'); }
+
+    protected function _replace() : string { return $this->getPart('replace'); }
     
     protected function _from() : string { return $this->getPart('from'); }
 
