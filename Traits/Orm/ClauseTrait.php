@@ -54,5 +54,5 @@ trait ClauseTrait {
 
     #endregion
 
-    // public function reset() : self { $this->_parts = []; $this->_sorts = []; return $this; }
+    public function reset() : self { $this->_parts = []; $this->_sorts = []; return $this; }
 }

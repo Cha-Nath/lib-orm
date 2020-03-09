@@ -12,6 +12,7 @@ trait QueryTrait {
     protected function Query() : QueryBuilder { return $this->QueryBuilder($this->getTable()); }
 
     protected function close(\PDOStatement &$req) : void {
+        $this->reset();
         $req->closeCursor();
         $req = null;
     }
