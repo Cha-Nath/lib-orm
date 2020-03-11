@@ -15,7 +15,7 @@ trait DebugTrait {
         if($this->_debug) :
             var_dump($debug);
             $logs = ['Orm Debug' => json_encode($debug)];
-            if($this->_die) $this->log($logs); else $this->dlog($logs);
+            if(!$this->_die) $this->log($logs); else $this->dlog($logs);
         endif;
     }
 
