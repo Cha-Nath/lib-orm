@@ -30,8 +30,12 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
     
     public function __construct() {
         
-        $db = $this->Parser()->get(Path::i()->getConfig() . 'db');
-        $this->setPrefix($db['prefix']);
+        $config = Path::i()->getConfig() . 'db';
+
+        if(file_exists($config . '.yaml')) :
+            $db = $this->Parser()->get($config);
+            $this->setPrefix($db['prefix']);
+        endif;
 
         Connection::i()->init($db);
     }
