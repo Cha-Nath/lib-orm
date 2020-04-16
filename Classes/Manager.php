@@ -109,6 +109,24 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
         return $this->handleRowCount($req);
     }
 
+    public function run(string $file) : bool {
+
+        $bool = false;
+
+        if(file_exists($file)) :
+            if(!empty($sql = file_get_contents($file))) :
+
+                $req = $this->execute($sql, []);
+                $this->close($req);
+
+                $bool = true;
+
+            endif;
+        endif;
+
+        return $bool;
+    }
+
     #region Getter
     
     public function getEntity() : string { return $this->_entity; }
