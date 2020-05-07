@@ -20,6 +20,8 @@ trait HandleTrait {
         $entities = [];
         $entity = $this->getEntity();
         
+        // $req->setFetchMode(\PDO::FETCH_ASSOC);
+        // foreach($req as $r) $entities[] = (new $entity)->hydrate($r);
         while($r = $req->fetch(\PDO::FETCH_ASSOC)) $entities[] = (new $entity)->hydrate($r);
 
         $this->close($req);

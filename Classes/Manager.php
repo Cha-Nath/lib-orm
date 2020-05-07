@@ -30,6 +30,7 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
     
     public function __construct() {
         
+        $db = [];
         $config = Path::i()->getConfig() . 'db';
 
         if(file_exists($config . '.yaml')) :

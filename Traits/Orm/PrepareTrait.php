@@ -21,7 +21,7 @@ trait PrepareTrait {
             $count = count($parameters);
             foreach($parameters as $key => $value) :
 
-                $slug = ':' . $prefix . $this->str_slug($key) . '_' . $i;
+                $slug = ':' . $prefix . $this->str_slug($key, '_') . '_' . $i;
 
                 if(!$into) :
                     $string .= $key . '=' . $slug;
