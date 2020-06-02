@@ -16,10 +16,11 @@ class Connection implements ConnectionInterface {
 
     private function __construct() {}
 
-    public static function i() { 
-        if(empty(self::$_i)) self::$_i = new Connection;
+    public static function i(string $instance = 'i') : Connection { 
+        if(empty(self::$_i) || !(array_key_exists($instance, self::$_i) && !empty(self::$_i[$instance])))
+            self::$_i[$instance] = new Connection;
 
-        return self::$_i;
+        return self::$_i[$instance];
     }
 
     public function init(array $parameters) {

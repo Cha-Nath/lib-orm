@@ -6,9 +6,10 @@ interface ConnectionInterface {
 
     /**
      *
+     * @param string $instance
      * @return Connection
      */
-    public static function i();
+    public static function i(string $instance = 'i');
 
     /**
      *
