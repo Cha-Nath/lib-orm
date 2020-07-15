@@ -28,15 +28,15 @@ class Connection implements ConnectionInterface {
         foreach($parameters as $key => $value)
             if(property_exists($this, $property = '_' . $key)) $this->{$property} = $value;
 
-            try {
-                ($connection = new \PDO(
-                    'mysql:host=' . $this->_host . ';dbname=' . $this->_name,
-                    $this->_user,
-                    $this->_pwd,
-                    [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']
-                ))->setAttribute(\PDO::ATTR_ERRMODE,\PDO::ERRMODE_WARNING);
-                    
-                $this->setConnection($connection);
+        try {
+            ($connection = new \PDO(
+                'mysql:host=' . $this->_host . ';dbname=' . $this->_name,
+                $this->_user,
+                $this->_pwd,
+                [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']
+            ))->setAttribute(\PDO::ATTR_ERRMODE,\PDO::ERRMODE_WARNING);
+                
+            $this->setConnection($connection);
 
         } catch (\Exception $e){
             die( 'PDO connexion error n° ' . $e->getCode() . ': ' . $e->getMessage() );

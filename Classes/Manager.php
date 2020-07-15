@@ -2,6 +2,7 @@
 
 namespace nlib\Orm\Classes;
 
+use nlib\Instance\Traits\InstanceTrait;
 use nlib\Orm\Interfaces\DebugTraitInterface;
 use nlib\Orm\Interfaces\PrepareTraitInterface;
 use nlib\Orm\Interfaces\ManagerInterface;
@@ -23,22 +24,24 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
     use QueryTrait;
     use HandleTrait;
     use DebugTrait;
+    use InstanceTrait;
 
     private $_table;
     private $_prefix;
     private $_entity;
     
-    public function __construct() {
+    public function __construct(string $instance = 'i') {
         
         $db = [];
-        $config = Path::i()->getConfig() . 'db';
+        $this->setInstance($instance);
+        $config = Path::i($this->_i())->getConfig() . 'db';
 
         if(file_exists($config . '.yaml')) :
             $db = $this->Parser()->get($config);
             $this->setPrefix($db['prefix']);
         endif;
 
-        Connection::i()->init($db);
+        Connection::i($this->_i())->init($db);
     }
 
     public function init(string $entity) : self {

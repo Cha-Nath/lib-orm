@@ -11,8 +11,9 @@ trait ManagerTrait {
     #region Getter
 
     public function Manager(string $manager) : Manager {
-        if(empty($this->_manager)) $this->setManager(new Manager);
-        return $this->_manager->init($manager);
+        $instance = (method_exists($this, $method = '_i')) ? $this->{$method}() : 'i';
+        if(empty($this->_manager)) $this->setManager(new Manager($instance));
+        return $this->_manager->setInstance($instance)->init($manager);
     }
     
     #endregion
