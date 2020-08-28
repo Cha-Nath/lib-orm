@@ -2,6 +2,9 @@
 
 namespace nlib\Orm\Interfaces;
 
+use PDO;
+use nlib\Orm\Classes\Connection;
+
 interface ConnectionInterface {
 
     /**
@@ -9,18 +12,18 @@ interface ConnectionInterface {
      * @param string $instance
      * @return Connection
      */
-    public static function i(string $instance = 'i');
+    public static function i(string $instance = 'i') : Connection;
 
     /**
      *
-     * @param [type] $connection
+     * @param null|PDO $connection
      * @return this
      */
-    public function setConnection($connection);
+    public function setConnection(?PDO $connection);
 
     /**
      *
-     * @return PDO
+     * @return null|PDO
      */
-    public function getConnection();
+    public function getConnection() : ?PDO;
 }
