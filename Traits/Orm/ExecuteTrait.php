@@ -18,7 +18,7 @@ trait ExecuteTrait {
 
         try {
 
-            $req = Connection::i()->getConnection()->prepare($sql);
+            $req = Connection::i($this->_i())->getConnection()->prepare($sql);
             $this->bind($req, $binds);
             $this->debug($sql, $binds, $req);
             $req->execute();
