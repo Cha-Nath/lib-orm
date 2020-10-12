@@ -4,4 +4,4 @@ namespace nlib\Orm\Entity;
 
 use Nlib\ObjectList\Classes\ObjectList;
 
-class LinkList extends ObjectList { }
+class JoinList extends ObjectList { }

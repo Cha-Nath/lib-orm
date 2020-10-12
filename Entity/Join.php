@@ -4,7 +4,7 @@ namespace nlib\Orm\Entity;
 
 use Nlib\ObjectList\Classes\ObjectList;
 
-class Link extends ObjectList {
+class Join extends ObjectList {
 
     protected $_entity;
     protected $_table;
