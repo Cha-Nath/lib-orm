@@ -15,6 +15,7 @@ use nlib\Yaml\Traits\ParserTrait;
 use nlib\Orm\Traits\Orm\DebugTrait;
 use nlib\Orm\Traits\Orm\ExecuteTrait;
 use nlib\Orm\Traits\Orm\HandleTrait;
+use nlib\Orm\Traits\Orm\JoinTrait;
 use nlib\Orm\Traits\Orm\QueryTrait;
 
 class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInterface, StringTraitInterface, DebugTraitInterface {
@@ -25,6 +26,7 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
     use HandleTrait;
     use DebugTrait;
     use InstanceTrait;
+    use JoinTrait;
 
     private $_table;
     private $_prefix;
