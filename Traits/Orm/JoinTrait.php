@@ -8,15 +8,33 @@ trait JoinTrait {
 
     protected $_JoinList;
 
-    public function t(JoinList $JoinList, string $prefix) {
+    public function join() {
 
-        $in = '';
+        $JoinList = $this->getJoins();
+        $string = '';
         $i = $JoinList->count();
-        // $prefix;
+        $prefix = $this->getPrefix();
 
         foreach($JoinList as $Join) :
-            $in .= $prefix . $Join->getTable() . ', ' . $prefix . $Join->getFTable();
-            if($i > 1) $in .= ', ';
+            $string .= $prefix . $Join->getTable() . ', ' . $prefix . $Join->getFTable();
+            if($i > 1) $string .= ', ';
+            --$i;
+        endforeach;
+
+        $sql = $this->Query()
+            ->select('CONCAT(table_name, ".", column_name, " AS ", CHAR(256), table_name, ".", column_name, CHAR(256)) field_names')
+            ->from('information_schema.columns')
+            ->where('table_name IN(' . $string . ')')
+            ->end();
+
+        $req = $this->execute($sql, []);
+        $results = $this->handleDataArray($req);
+        $string = $sql = '';
+
+        $i = count($results);
+        foreach($results as $value) :
+            $string .= $value;
+            if($i > 1) $string = ', ';
             --$i;
         endforeach;
         

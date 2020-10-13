@@ -28,4 +28,15 @@ trait HandleTrait {
 
         return $entities;
     }
+
+    protected function handleDataArray(PDOStatement &$req) : array {
+
+        $results = [];
+
+        while($r = $req->fetch(\PDO::FETCH_ASSOC)) $results[] = $r;
+
+        $this->close($req);
+
+        return $results;
+    }
 }
