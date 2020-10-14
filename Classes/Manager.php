@@ -3,6 +3,7 @@
 namespace nlib\Orm\Classes;
 
 use nlib\Instance\Traits\InstanceTrait;
+use nlib\Orm\Entity\ResultList;
 use nlib\Orm\Interfaces\DebugTraitInterface;
 use nlib\Orm\Interfaces\PrepareTraitInterface;
 use nlib\Orm\Interfaces\ManagerInterface;
@@ -18,7 +19,7 @@ use nlib\Orm\Traits\Orm\HandleTrait;
 use nlib\Orm\Traits\Orm\JoinTrait;
 use nlib\Orm\Traits\Orm\QueryTrait;
 
-class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInterface, StringTraitInterface, DebugTraitInterface {
+class Manager implements ParserTraitInterface, PrepareTraitInterface, StringTraitInterface, DebugTraitInterface {
 
     use ParserTrait;
     use ExecuteTrait;
@@ -55,23 +56,53 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
         return $this;
     }
 
-    public function findBy(array $parameters = []) : array {
+    public function findBy(array $parameters = []) {
         
-        $entities = $binds = [];
-        
+        $binds = [];
+        $Query = $this->Query();        
+        $method = 'handleSimpleDataObjects';
         $binds = $this->prepareParameters($parameters);
-        $sql = $this->_select() . $this->_from() . $this->_where() . $this->_sort() . $this->Query()->end();
+        $w = $this->_where();
+        // var_dump();die;
+        if(!empty($this->getJoins())) :
+            $select = $from = $where = '';
+            $method = 'handleMultipleDataObjects';
+
+            $this->join($select, $from, $where);
+
+            // $w = $this->_where();
+            // var_dump($where);
+            // var_dump($this->log([$w]));die;
+
+            $sql = $Query->select($select)->from($from) . $w;
+            // $sql .= $Query->where('cpuc');
+            // var_dump($this->log([$Query->where('cpuc')]));die;
+
+
+            if(!empty($w)) $sql .= ' AND ' . $where;
+            else $sql .= $Query->where($where);
+
+            // var_dump($this->log([$sql]));die;
+        else : $sql = $this->_select() . $this->_from() . $this->_where(); endif;
+        
+        $sql .= $this->_sort() . $this->Query()->end();
+
+        // var_dump($this->log([$sql]));die;
 
         $req = $this->execute($sql, $binds);
 
-        return $this->handleSimpleDataObjects($req);
+        return $this->{$method}($req);
     }
 
     public function findOneBy(array $parameters = []) {
 
+        $result = null;
         $entities = $this->prepareSorts(['limit' => 1])->findBy($parameters);
 
-        return !empty($entities) ? $entities[0] : null;
+        if($entities instanceof ResultList) : $Results = $entities->get(); return reset($Results);
+        elseif(!empty($entities)) : $result = $entities[0]; endif;
+
+        return $result;
     }
 
     public function update(array $values, array $parameters = []) : bool {

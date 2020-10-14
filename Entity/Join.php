@@ -29,7 +29,7 @@ class Join extends ObjectList {
     public function setEntity($entity) : self { $this->_entity = $entity; return $this; }
     public function setTable($table) : self { $this->_table = $table; return $this; }
     public function setKey($key) : self { $this->_key = $key; return $this; }
-    public function setFEntity($fentity) : self { return $this->_fentity = $fentity; return $this; }
+    public function setFEntity($fentity) : self { $this->_fentity = $fentity; return $this; }
     public function setFTable($ftable) : self { $this->_ftable = $ftable; return $this; }
     public function setFKey($fkey) : self { $this->_fkey = $fkey; return $this; }
 

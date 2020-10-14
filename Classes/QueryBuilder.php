@@ -22,7 +22,7 @@ class QueryBuilder {
     }
 
     public function from(string $table = '') : self {
-        $this->_query = ' FROM ' . $this->getTable($table) . ' ';
+        $this->_query .= ' FROM ' . $this->getTable($table) . ' ';
         return $this;
     }
 
@@ -66,12 +66,21 @@ class QueryBuilder {
         return $this;
     }
 
+    public function into(string $table = '', string $key = '', string $value = '') : string {
+        return ' INTO ' . $this->getTable($table) . ' (' . $key . ') VALUES (' . $value . ') ';
+    }
+
+    public function reset() : self { $this->_query = ''; return $this; }
+    
+
     #region Getter
     
     public function getTable(string $table = '') { return (!empty($table) ? $table : $this->_table); }
 
-    public function into(string $table = '', string $key = '', string $value = '') : string {
-        return ' INTO ' . $this->getTable($table) . ' (' . $key . ') VALUES (' . $value . ') '; }
-    
+    public function innerJoin(string $table, string $ftable, string $key, string $fkey) {
+        $this->_query .= ' ' . $table .  ' INNER JOIN ' . $ftable . ' ON ' . $table . '.' . $key . '=' . $ftable . '.' . $fkey;
+        return $this;
+    }
+
     #endregion
 }

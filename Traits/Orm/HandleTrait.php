@@ -2,6 +2,11 @@
 
 namespace nlib\Orm\Traits\Orm;
 
+use Nlib\ObjectList\Classes\ObjectList;
+use nlib\Orm\Classes\Entity;
+use nlib\Orm\Entity\EntityList;
+use nlib\Orm\Entity\JoinList;
+use nlib\Orm\Entity\ResultList;
 use PDOStatement;
 
 trait HandleTrait {
@@ -29,11 +34,54 @@ trait HandleTrait {
         return $entities;
     }
 
+    protected function handleMultipleDataObjects(PDOStatement &$req) : ResultList {
+
+        $EntityList = new EntityList;
+        $ResultList = new ResultList;
+        
+        $tmps = [];
+
+        foreach($JoinList = $this->getJoins() as $Join) : $casts[$Join->getTable()] = $Join->getEntity(); $casts[$Join->getFTable()] = $Join->getFEntity(); endforeach;
+
+        // var_dump($casts);
+// var_dump($req->fetch(\PDO::FETCH_ASSOC));
+        while($results = $req->fetch(\PDO::FETCH_ASSOC)) :
+// var_dump($results);
+            // foreach($results as $r) :
+                $List = clone $EntityList;
+
+                foreach($results as $key => $value) :
+                    $explodes = explode('__', $key);
+                    $table = str_replace($this->getPrefix(), '', $explodes[0]);
+                    $tmps[$table][$explodes[1]] = $value;
+                endforeach;
+
+                foreach($tmps as $k => $tmp) :
+                    $List->add((new $casts[$k])->hydrate($tmp), $casts[$k]);
+                    
+                    // $t[$casts[$k]] = (new $casts[$k])->hydrate($tmp);
+                    // $t->add((new $casts[$k])->hydrate($tmp));
+                endforeach;
+// var_dump($List);
+                // $ObjectList->add();
+                // if(!$List->is_empty()) :
+                    $ResultList->add($List);
+                // endif;
+
+                // $ventities[] = $tmps;
+                // var_dump($tmps);
+            // endforeach;
+        endwhile;
+
+        // foreach
+        // var_dump($ResultList);
+
+        return $ResultList;
+    }
+
     protected function handleDataArray(PDOStatement &$req) : array {
 
-        $results = [];
-
-        while($r = $req->fetch(\PDO::FETCH_ASSOC)) $results[] = $r;
+        $results = $req->fetchAll(\PDO::FETCH_ASSOC);
 
         $this->close($req);
 
