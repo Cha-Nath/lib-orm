@@ -19,7 +19,7 @@ use nlib\Orm\Traits\Orm\HandleTrait;
 use nlib\Orm\Traits\Orm\JoinTrait;
 use nlib\Orm\Traits\Orm\QueryTrait;
 
-class Manager implements ParserTraitInterface, PrepareTraitInterface, StringTraitInterface, DebugTraitInterface {
+class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInterface, StringTraitInterface, DebugTraitInterface {
 
     use ParserTrait;
     use ExecuteTrait;
@@ -132,14 +132,17 @@ class Manager implements ParserTraitInterface, PrepareTraitInterface, StringTrai
         return $this->handleRowCount($req);
     }
 
-    public function replace(array $values, array $parameters = []) : bool {
+    public function replace(array $values) : bool {
+    // public function replace(array $values, array $parameters = []) : bool {
 
-        $vbinds = $this->prepareParameters($values, 'replace', ', ', 'replace_', true);
-        $pbinds = $this->prepareParameters($parameters);
+        $binds = $this->prepareParameters($values, 'replace', ', ', 'replace_', true);
+        // $vbinds = $this->prepareParameters($values, 'replace', ', ', 'replace_', true);
+        // $pbinds = $this->prepareParameters($parameters);
 
-        $binds = array_merge($vbinds, $pbinds);
+        // $binds = array_merge($vbinds, $pbinds);
         
-        $sql = $this->_replace() . $this->_where() . $this->Query()->end();
+        // $sql = $this->_replace() . $this->_where() . $this->Query()->end();
+        $sql = $this->_replace() . $this->Query()->end();
         
         $req = $this->execute($sql, $binds);
 

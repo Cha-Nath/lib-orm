@@ -14,9 +14,9 @@ interface ManagerInterface {
     /**
      *
      * @param array $parameters
-     * @return array
+     * @return array|ResultList
      */
-    public function findBy(array $parameters = []) : array;
+    public function findBy(array $parameters = []);
 
     /**
      *

@@ -66,6 +66,11 @@ class QueryBuilder {
         return $this;
     }
 
+    public function innerJoin(string $table, string $ftable, string $key, string $fkey) {
+        $this->_query .= ' ' . $table .  ' INNER JOIN ' . $ftable . ' ON ' . $table . '.' . $key . '=' . $ftable . '.' . $fkey;
+        return $this;
+    }
+
     public function into(string $table = '', string $key = '', string $value = '') : string {
         return ' INTO ' . $this->getTable($table) . ' (' . $key . ') VALUES (' . $value . ') ';
     }
@@ -76,11 +81,6 @@ class QueryBuilder {
     #region Getter
     
     public function getTable(string $table = '') { return (!empty($table) ? $table : $this->_table); }
-
-    public function innerJoin(string $table, string $ftable, string $key, string $fkey) {
-        $this->_query .= ' ' . $table .  ' INNER JOIN ' . $ftable . ' ON ' . $table . '.' . $key . '=' . $ftable . '.' . $fkey;
-        return $this;
-    }
 
     #endregion
 }
