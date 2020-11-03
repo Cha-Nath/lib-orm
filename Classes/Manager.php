@@ -116,6 +116,17 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
         $req = $this->execute($sql, $binds);
 
         return $this->handleRowCount($req);
+    }    
+
+    public function delete(array $parameters) : bool {
+
+        $binds = $this->prepareParameters($parameters);
+
+        $sql = $this->_delete() . $this->_where() . $this->Query()->end();
+
+        $req = $this->execute($sql, $binds);
+
+        return $this->handleRowCount($req);
     }
 
     public function insert(array $values, array $parameters = []) : bool {
