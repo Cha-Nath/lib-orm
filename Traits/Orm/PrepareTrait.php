@@ -33,6 +33,7 @@ trait PrepareTrait {
                     if($i < ($count - 1)) : $skey .= ', '; $svalue .= ', '; endif;
                 endif;
 
+                if($value == '') $value = null;
                 $binds[$slug] = [$value, $this->getPDOType($value)];
 
                 ++$i;
@@ -46,6 +47,7 @@ trait PrepareTrait {
     }
     
     protected function prepareCommons(array $elements, array $parameters) : array {
+        $commons = [];
         foreach($parameters as $key => $value) if(in_array($key = strtolower($key), $elements)) $commons[$key] = $this->Query()->{$key}($value);
         return $commons;
     }
