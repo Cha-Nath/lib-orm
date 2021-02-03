@@ -39,7 +39,7 @@ trait JoinTrait {
             ->reset()
             ->select('CONCAT(table_name, ".", column_name, " AS ", table_name, "__", column_name) field')
             ->from('information_schema.columns')
-            ->where('table_name IN(' . $in  . ')')
+            ->where('table_name IN(' . $in  . ') AND TABLE_SCHEMA = DATABASE()')
             ->end();
 
         $req = $this->execute($sql, []);
