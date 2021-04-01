@@ -10,7 +10,7 @@ trait PropertyTrait {
         $replace = 1;
 
         foreach ($properties as $key => $value) :
-            if(!$nullable && !(!empty($value) || is_numeric($value))) continue;
+            if(!$nullable && !(!empty($value) || is_numeric($value) || is_bool($value))) continue;
             
             if($lowercase) $key = strtolower($key);
             $results[str_replace('_', '', $key, $replace)] = $value;        
