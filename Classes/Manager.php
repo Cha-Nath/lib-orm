@@ -40,7 +40,7 @@ class Manager implements ManagerInterface, ParserTraitInterface, PrepareTraitInt
         $config = Path::i($this->_i())->getConfig() . 'db';
 
         if(file_exists($config . '.yaml')) :
-            $db = $this->Parser()->get($config);
+            $db = $this->Parser()->setInstance($instance)->get($config);
             $this->setPrefix($db['prefix']);
         endif;
 
